@@ -1,5 +1,5 @@
-def create_fire():
+def create_fire() -> str:
     return "Fire element created"
 
-def create_water():
+def create_water() -> str:
     return "Water element created"
