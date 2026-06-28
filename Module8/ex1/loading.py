@@ -1,15 +1,22 @@
 import sys
 import importlib.metadata
+import os
 
 REQUIRED_PACKAGES = ['pandas', 'numpy', 'requests', 'matplotlib']
 
 def check_dependencies():
     all_ok = True
     status_report = []
+    descriptions = {
+        "pandas": "Data manipulation ready",
+        "numpy": "Numerical computation ready",
+        "requests": "Network access ready",
+        "matplotlib": "Visualization ready",
+    }
     for pkg in REQUIRED_PACKAGES:
         try:
             version = importlib.metadata.version(pkg)
-            status_report.append(f"[OK] {pkg} ({version})")
+            status_report.append(f"[OK] {pkg} ({version}) - {descriptions[pkg]}")
         except importlib.metadata.PackageNotFoundError:
             status_report.append(f"[MISSING] {pkg}")
             all_ok = False
@@ -42,13 +49,11 @@ if __name__ == "__main__":
     for line in report:
         print(line)
     if not dependencies_passed:
-        is_poetry = "poetry" in "".join(sys.argv) or any("POETRY" in k for k in sys.environ)
+        is_poetry = "poetry" in "".join(sys.argv) or any("POETRY" in k for k in os.environ)
         
         print("\n[ERROR] Missing required Matrix sub-modules.")
         print("To load them into your environment, run:")
-        if is_poetry:
-            print("  poetry install")
-        else:
-            print("  pip install -r requirements.txt")
+        print("  poetry install")
+        print("  pip install -r requirements.txt")
         sys.exit(1)
     run_simulation()
