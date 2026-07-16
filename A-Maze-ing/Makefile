@@ -25,8 +25,8 @@ clean:
 	find . -name "*.pyc" -delete
 
 lint:
-	flake8 .
-	mypy \
+	python3 -m flake8 *
+	python3 -m mypy --strict *\
 	--warn-return-any \
 	--warn-unused-ignores\
 	--ignore-missing-imports \
