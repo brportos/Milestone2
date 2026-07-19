@@ -26,7 +26,7 @@ if __name__ == "__main__":
             print(f"Current Python: {sys.executable}")
             print(f"Virtual Environment: {venv_name}")
             print(f"Environment Path: {sys.prefix}")
-            print(f"\nSUCCESS: You're in an isolated environment!")
+            print("\nSUCCESS: You're in an isolated environment!")
             print("Safe to install packages without affecting")
             print("the global system.\n")
             print(f"Package installation path:\n{pkg_path}")
