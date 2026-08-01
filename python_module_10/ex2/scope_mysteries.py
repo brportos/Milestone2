@@ -1,41 +1,48 @@
 from collections.abc import Callable
+from typing import Any
 
 
-def mage_counter() -> Callable[[None], int]:
+def mage_counter() -> Callable[[], int]:
     count = 0
-    def counter() ->int:
+
+    def counter() -> int:
         nonlocal count
         count += 1
         return count
     return counter
 
+
 def spell_accumulator(initial_power: int) -> Callable[[int], int]:
     current_power = initial_power
+
     def accumulates_power(amount: int) -> int:
         nonlocal current_power
         current_power += amount
         return current_power
+
     return accumulates_power
 
-    
+
 def enchantment_factory(enchantment_type: str) -> Callable[[str], str]:
     def specified_enchantment(item_name: str) -> str:
         return f"{enchantment_type} {item_name}"
     return specified_enchantment
 
-def memory_vault() -> dict[str, Callable[[str, int | None], str | None]]:
+
+def memory_vault() -> dict[str, Callable[..., Any]]:
     vault = {}
+
     def store(key: str, value: int) -> None:
         vault[key] = value
-        
-    def recall(key: str) -> str:
+
+    def recall(key: str) -> int | str:
         try:
             return vault[key]
         except KeyError:
             return "Memory not found"
 
     return {
-        "store": store ,
+        "store": store,
         "recall": recall
         }
 
@@ -64,4 +71,5 @@ if __name__ == "__main__":
     recall = vault['recall']('secret')
     recall1 = vault['recall']('unknown')
     print(f"Store 'secret' = {recall}")
+    print(f"Recall 'secret': {recall}")
     print(f"Recall 'unknown': {recall1}")

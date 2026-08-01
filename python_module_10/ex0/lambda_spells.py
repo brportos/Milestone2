@@ -1,34 +1,51 @@
-def artifact_sorter(artifacts: list[dict]) -> list[dict]:
+from typing import Any
+
+
+def artifact_sorter(artifacts: list[dict[str, Any]]) -> list[dict[str, Any]]:
     try:
         return sorted(
             artifacts,
-            key=lambda artifact : artifact["power"],
+            key=lambda artifact: artifact["power"],
             reverse=True
             )
     except Exception as e:
         print(f"Error: {e}")
+        return []
 
-def power_filter(mages: list[dict], min_power: int) -> list[dict]:
+
+def power_filter(
+    mages: list[dict[str, Any]],
+    min_power: int
+) -> list[dict[str, Any]]:
     try:
         return list(filter(lambda mage: mage["power"] >= min_power, mages))
     except Exception as e:
         print(f"Error: {e}")
+        return []
+
 
 def spell_transformer(spells: list[str]) -> list[str]:
     try:
         return list(map(lambda spell: f"* {spell} *", spells))
     except Exception as e:
         print(f"Erro: {e}")
+        return []
 
-def mage_stats(mages: list[dict]) -> dict:
+
+def mage_stats(mages: list[dict[str, Any]]) -> dict[str, Any]:
     try:
         most = max(mages, key=lambda mage: mage["power"])
         least = min(mages, key=lambda mage: mage["power"])
         power = map(lambda mage: mage["power"], mages)
         average = round(sum(power) / len(mages), 2)
-        return dict(most, least, average)
+        return {
+            "most": most,
+            "least": least,
+            "avarage": average
+        }
     except Exception as e:
         print(f"Error: {e}")
+        return {}
 
 
 if __name__ == "__main__":
