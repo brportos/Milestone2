@@ -1,0 +1,6 @@
+__pycache__
+.env/
+dist/
+output_maze.txt
+poetry.lock
+mlx-2.2-py3-none-any.whl

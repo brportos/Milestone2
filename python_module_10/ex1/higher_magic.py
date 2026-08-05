@@ -51,6 +51,11 @@ if __name__ == "__main__":
 
     def heal(target: str, power: int) -> str:
         return f"Heal {target}"
+    
+    print("\nTesting spell spell_sequence..")
+    result = spell_sequence([spell, fireball, heal])
+    stock = result("Globin", 30)
+    print(*stock)
 
     print("\nTesting spell combiner...")
     combiner = spell_combiner(fireball, heal)

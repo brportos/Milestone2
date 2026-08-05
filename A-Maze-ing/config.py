@@ -1,10 +1,17 @@
-#!/usr/bin/env python3
 from typing import Any
+import sys
+
 
 REQUIRED_KEYS = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
 
 
 def convert_value(config: dict[str, Any]) -> dict[str, Any]:
+    """Converts a raw string configuration value into its appropriate Python type.
+    Args:
+        val (str): Raw string value extracted from configuration file.
+    Returns:
+        int | bool | tuple[int, int]: The converted data type representation.
+    """
     try:
         config["WIDTH"] = int(config["WIDTH"])
         config["HEIGHT"] = int(config["HEIGHT"])
@@ -12,6 +19,7 @@ def convert_value(config: dict[str, Any]) -> dict[str, Any]:
         entry = config["ENTRY"].split(',')
         if len(entry) != 2:
             raise ValueError("value not in format (x, y)")
+
         config["ENTRY"] = (int(entry[0]), int(entry[1]))
 
         exited = config["EXIT"].split(',')
@@ -32,12 +40,19 @@ def convert_value(config: dict[str, Any]) -> dict[str, Any]:
         else:
             config["SEED"] = 42
 
+        return config
     except ValueError as e:
         raise ValueError(f"Value invalide in config: {e}")
-    return config
 
 
 def validate_value(config: dict[str, Any]) -> None:
+    """Validates configuration keys against structural and type bounds.
+    Args:
+        key (str): Configuration key name.
+        val (Any): Converted value associated with the key.
+    Raises:
+        ValueError: If key values are out of bounds or logically invalid.
+    """
     if config["WIDTH"] < 1:
         raise ValueError("Error, WIDTH have to be greater than 1")
     if config["HEIGHT"] < 1:
@@ -62,6 +77,15 @@ def validate_value(config: dict[str, Any]) -> None:
 
 
 def parse_config(filepath: str) -> dict[str, Any]:
+    """Parses a configuration file and extracts validated maze options.
+    Args:
+        filepath (str): Path to the key-value configuration file.
+    Returns:
+        dict[str, Any]: Dictionary containing all parsed maze properties.
+    Raises:
+        FileNotFoundError: If the specified file path does not exist.
+        ValueError: If mandatory parameters are missing or invalid.
+    """
     config = {}
     try:
         with open(filepath, "r") as f:
@@ -77,17 +101,19 @@ def parse_config(filepath: str) -> dict[str, Any]:
                     continue
                 config[parts[0].strip()] = parts[1].strip()
 
-        for cle in REQUIRED_KEYS:
-            if cle not in config:
-                raise ValueError(f"Error: Missing key {cle}")
+        for key in REQUIRED_KEYS:
+            if key not in config:
+                raise ValueError(f"Error: Missing key {key}")
 
         config = convert_value(config)
         validate_value(config)
 
+        return config
+
     except FileNotFoundError:
         print(f"Error : file '{filepath}' not found")
+        sys.exit(1)
 
     except Exception as e:
         print(f"Error: {e}")
-
-    return config
+        sys.exit(1)
