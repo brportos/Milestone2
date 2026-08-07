@@ -1,12 +1,16 @@
+"""Module for parsing and validating maze configuration files."""
+
 from typing import Any
 import sys
+import random
 
 
 REQUIRED_KEYS = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
 
 
 def convert_value(config: dict[str, Any]) -> dict[str, Any]:
-    """Converts a raw string configuration value into its appropriate Python type.
+    """Convert a raw string configuration value into its appropriate Python.
+
     Args:
         val (str): Raw string value extracted from configuration file.
     Returns:
@@ -38,7 +42,7 @@ def convert_value(config: dict[str, Any]) -> dict[str, Any]:
         if "SEED" in config:
             config["SEED"] = int(config["SEED"])
         else:
-            config["SEED"] = 42
+            config["SEED"] = random.randint(0, 100)
 
         return config
     except ValueError as e:
@@ -46,7 +50,8 @@ def convert_value(config: dict[str, Any]) -> dict[str, Any]:
 
 
 def validate_value(config: dict[str, Any]) -> None:
-    """Validates configuration keys against structural and type bounds.
+    """Validate configuration keys against structural and type bounds.
+
     Args:
         key (str): Configuration key name.
         val (Any): Converted value associated with the key.
@@ -77,7 +82,8 @@ def validate_value(config: dict[str, Any]) -> None:
 
 
 def parse_config(filepath: str) -> dict[str, Any]:
-    """Parses a configuration file and extracts validated maze options.
+    """Parse a configuration file and extracts validated maze options.
+
     Args:
         filepath (str): Path to the key-value configuration file.
     Returns:

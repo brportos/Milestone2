@@ -1,3 +1,4 @@
+"""Main entry point for the A-Maze-ing generator and visualizer."""
 import sys
 from mazegen import MazeGenerator
 from writer import write_maze
@@ -33,7 +34,8 @@ WALL_COLORS = [
 
 
 class Renderer:
-    """Manages graphical rendering and user interactions for the maze using MiniLibX.
+    """Manages maze graphics and MiniLibX input.
+
     Attributes:
         mlx (Mlx): MiniLibX library instance wrapper.
         mlx_ptr (Any): Pointer to the MLX environment instance.
@@ -50,20 +52,24 @@ class Renderer:
         grid (list[list[int]] | None): 2D integer matrix of maze walls.
         entry (tuple[int, int] | None): Entry coordinate (x, y).
         exit (tuple[int, int] | None): Exit coordinate (x, y).
-        chemin (str | list[tuple[int, int]] | None): Path solution sequence or coordinates.
+        chemin (str | list[tuple[int, int]] | None):
+        Path solution sequence or coordinates.
         show_path (bool): Toggle indicator for displaying solution dots.
         perfect (bool): True if maze has a single unique path, False otherwise.
         seed (int): Current seed used for maze generation.
         color_index (int): Index selector for the wall color palette.
         wall_color (int): Active wall color hex value.
     """
-    def __init__(self, maze_width: int, maze_height: int, perfect: bool) -> None:
-        """Initializes MLX graphics context, calculates window geometry, and sets hooks.
-        Args:
-            maze_width (int): Column count of the maze grid.
-            maze_height (int): Row count of the maze grid.
-            perfect (bool): Indicates if the maze generator should carve loops.
-        """
+
+    def __init__(
+        self,
+        maze_width: int,
+        maze_height: int,
+        entry: tuple[int, int],
+        exit: tuple[int, int],
+        perfect: bool
+    ) -> None:
+        """Initialize MLX window and event hooks."""
         self.mlx = Mlx()
         self.mlx_ptr = self.mlx.mlx_init()
 
@@ -99,10 +105,10 @@ class Renderer:
         self.mlx.mlx_hook(self.win, 33, 0, self.destroy, None)
 
         """given labyrinthe"""
-        self.grid = None
-        self.entry = None
-        self.exit = None
-        self.chemin = None
+        self.grid: list[list[int]] | None = None
+        self.entry: tuple[int, int] = entry
+        self.exit: tuple[int, int] = exit
+        self.chemin: str | list[tuple[int, int]] | None = None
         self.show_path = False
         self.perfect = perfect
         self.seed = 0
@@ -110,18 +116,13 @@ class Renderer:
         self.wall_color = 0xFFFFFFFF
 
     def put_pixel(self, x: int, y: int, color: int) -> None:
-        """Writes a single color pixel into the image buffer at position (x, y).
-        Args:
-            x (int): Horizontal pixel coordinate.
-            y (int): Vertical pixel coordinate.
-            color (int): 32-bit ARGB/RGBA color integer value.
-        """
+        """Write a single color pixel into the image buffer(x, y)."""
         if 0 <= x < self.width and 0 <= y < self.height:
             off: int = y * self.sl + x * (self.bpp // 8)
             self.data[off:off+4] = color.to_bytes(4, 'little')
 
     def flush(self) -> None:
-        """Pushes the memory image buffer to the active MLX window."""
+        """Pushe the memory image buffer to the active MLX window."""
         self.mlx.mlx_put_image_to_window(
             self.mlx_ptr,
             self.win,
@@ -138,7 +139,8 @@ class Renderer:
         height: int,
         color: int
     ) -> None:
-        """Fills a rectangular region in the image buffer with a solid color.
+        """Fill a rectangular region in the image buffer with a solid color.
+
         Args:
             x (int): Starting horizontal coordinate of top-left corner.
             y (int): Starting vertical coordinate of top-left corner.
@@ -151,12 +153,13 @@ class Renderer:
                 self.put_pixel(x + dx, y + dy, color)
 
     def clear(self) -> None:
-        """Clears the entire image framebuffer data to black bytes."""
+        """Clear the entire image framebuffer data to black bytes."""
         size = self.height * self.sl
         self.data[:size] = bytes(size)
 
     def key_hook(self, keycode: int, params: None) -> int:
-        """Processes keyboard input events triggered within the window.
+        """Procedure keyboard input events triggered within the window.
+
         Args:
             keycode (int): System keycode identifier of the pressed key.
             params (Any): Unused hook parameter passed by MLX.
@@ -197,7 +200,8 @@ class Renderer:
         return 0
 
     def destroy(self, params: None) -> None:
-        """Destroys the process cleanly upon clicking the window close button.
+        """Destroy the process upon clicking the window close button.
+
         Args:
             params (Any): Unused event parameter.
         Returns:
@@ -213,10 +217,11 @@ class Renderer:
         exit: tuple[int, int],
         width: int,
         height: int,
-        chemin,
-        show_path
+        chemin: str | list[tuple[int, int]] | None,
+        show_path: bool
     ) -> None:
-        """Renders walls, start/exit points, pattern 42, and path onto the buffer.
+        """Render walls, start/exit points, pattern 42, and path into buffer.
+
         Args:
             grid (list[list[int]] | None): Matrix containing wall bitmasks.
             entry (tuple[int, int] | None): Entry cell coordinates.
@@ -234,6 +239,7 @@ class Renderer:
         PATH_COLOR = 0xFF00FFFF
         COLOR_42 = 0xFF4B0082
 
+        path: list[tuple[int, int]] = []
         if isinstance(chemin, str):
             path = [entry]
             curr_x, curr_y = entry
@@ -248,7 +254,9 @@ class Renderer:
                 elif direction == 'W':
                     curr_x -= 1
                 path.append((curr_x, curr_y))
-            chemin = path
+
+        elif isinstance(chemin, list):
+            path = chemin
 
         for y in range(height):
             for x in range(width):
@@ -272,7 +280,7 @@ class Renderer:
                         CELL_SIZE,
                         EXIT_COLOR
                         )
-                if show_path and (x, y) in chemin:
+                if show_path and (x, y) in path:
                     dot_size = 6
                     cx = pixel_x + CELL_SIZE // 2 - dot_size // 2
                     cy = pixel_y + CELL_SIZE // 2 - dot_size // 2
@@ -326,10 +334,10 @@ class Renderer:
             "a:regen  w:show/hide path  d:Change_color  esc:quit"
             )
 
-        return 0
-
     def redraw(self) -> None:
-        """Clears the window image buffer and triggers full scene re-render."""
+        """Clear the window image buffer and triggers full scene re-render."""
+        if self.grid is None or self.entry is None or self.exit is None:
+            return
         self.clear()
         self.mlx.mlx_clear_window(self.mlx_ptr, self.win)
         self.draw_maze(
@@ -366,7 +374,13 @@ if __name__ == "__main__":
         config["OUTPUT_FILE"]
     )
 
-    render = Renderer(config["WIDTH"], config["HEIGHT"], config["PERFECT"])
+    render = Renderer(
+        config["WIDTH"],
+        config["HEIGHT"],
+        maze.entry,
+        maze.exit,
+        config["PERFECT"]
+        )
     render.grid = maze.get_grid()
     render.entry = maze.entry
     render.exit = maze.exit

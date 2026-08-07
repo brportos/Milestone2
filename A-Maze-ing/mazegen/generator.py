@@ -1,3 +1,5 @@
+"""Provide maze generation algorithms and pathfinding tools."""
+
 import random
 import sys
 
@@ -20,6 +22,8 @@ WALL = {'N': 1, 'E': 2, 'S': 4, 'W': 8}
 
 
 class MazeGenerator:
+    """Class responsible for generating grid mazes."""
+
     def __init__(
         self,
         width: int,
@@ -29,6 +33,7 @@ class MazeGenerator:
         seed: int,
         perfect: bool
     ) -> None:
+        """Initialize maze parameters, random seed, and grid state."""
         self.width = width
         self.height = height
         self.entry = entry
@@ -44,7 +49,8 @@ class MazeGenerator:
             ]
 
     def pattern_42(self) -> None:
-        """Carves a solid 7x5 pattern '42' into the center of the maze grid.
+        """Carve a solid 7x5 pattern '42' into the center of the maze grid.
+
         Raises:
             ValueError: If maze dimensions are smaller than 7x5.
         """
@@ -72,7 +78,8 @@ class MazeGenerator:
                     self.visited[start_y + y][start_x + x] = True
 
     def depth_first_search(self) -> None:
-        """Carves the maze paths using iterative Depth-First Search backtracker.
+        """Carve the maze paths using iterative Depth-First Search backtracker.
+
         Carves paths starting from the entry coordinate and optionally invokes
         the imperfect passage creator if `self.perfect` is False.
         """
@@ -106,12 +113,14 @@ class MazeGenerator:
         x: int,
         y: int
     ) -> list[tuple[str, int, int]]:
-        """Finds all unvisited adjacent neighbor cells within maze bounds.
+        """Find all unvisited adjacent neighbor cells within maze bounds.
+
         Args:
             x (int): Current cell horizontal index.
             y (int): Current cell vertical index.
         Returns:
-            list[tuple[str, int, int]]: List of (direction, target_x, target_y) tuples.
+            list[tuple[str, int, int]]:
+            List of (direction, target_x, target_y) tuples.
         """
         voisins = []
         for direction, (dx, dy) in DIRECTIONS.items():
@@ -132,7 +141,8 @@ class MazeGenerator:
         ny: int,
         direction: str
     ) -> None:
-        """Removes adjacent walls between two neighboring cells.
+        """Remove adjacent walls between two neighboring cells.
+
         Args:
             x (int): Source cell X coordinate.
             y (int): Source cell Y coordinate.
@@ -148,14 +158,16 @@ class MazeGenerator:
         self.grid[ny][nx] &= ~opposite_wall
 
     def get_grid(self) -> list[list[int]]:
-        """Returns the current state of the 2D maze grid.
+        """Return the current state of the 2D maze grid.
+
         Returns:
             list[list[int]]: The integer matrix containing cell bitmasks.
         """
         return self.grid
-    
+
     def is_inside_pattern_42(self, x: int, y: int) -> bool:
-        """Checks if a given coordinate lies inside the central Pattern 42 zone.
+        """Check if a given coordinate lies inside the central Pattern 42.
+
         Args:
             x (int): Horizontal coordinate to test.
             y (int): Vertical coordinate to test.
@@ -165,14 +177,19 @@ class MazeGenerator:
         h_pat, w_pat = 5, 7
         start_x = (self.width // 2) - (w_pat // 2)
         start_y = (self.height // 2) - (h_pat // 2)
-        return start_x <= x < start_x + w_pat and start_y <= y < start_y + h_pat
+        return (
+            start_x <= x < start_x + w_pat and start_y <= y < start_y + h_pat
+        )
 
     def is_cell_open(self, x: int, y: int, direction: str) -> bool:
-        """Returns True if the wall in `direction` at (x, y) is carved/open."""
+        """Return True if the wall in `direction`(x, y) is carved/open."""
         return (self.grid[y][x] & WALL_BITS[direction]) == 0
 
     def creates_3x3_open_area(self, target_x: int, target_y: int) -> bool:
-        """Checks if breaking a wall at (target_x, target_y) forms any 3x3 open block locally."""
+        """Check if breaking a wall at (target_x, target_y).
+
+        forms any 3x3 open block locally.
+        """
         start_x_min = max(0, target_x - 2)
         start_x_max = min(self.width - 3, target_x)
         start_y_min = max(0, target_y - 2)
@@ -198,7 +215,8 @@ class MazeGenerator:
         return False
 
     def imperfect_path(self) -> None:
-        """Randomly breaks walls across the grid to create cycles and multiple routes.
+        """Randomly breaks walls to create cycles and multiple routes.
+
         Protects the inner Pattern 42 region and prevents 3x3 open areas.
         """
         attempts = (self.width * self.height) // 4
@@ -225,12 +243,16 @@ class MazeGenerator:
                 self.grid[ry][rx] &= ~wall_bit
                 self.grid[ny][nx] &= ~opp_bit
 
-                if self.creates_3x3_open_area(rx, ry) or self.creates_3x3_open_area(nx, ny):
+                if (
+                    self.creates_3x3_open_area(rx, ry) or
+                    self.creates_3x3_open_area(nx, ny)
+                ):
                     self.grid[ry][rx] |= wall_bit
                     self.grid[ny][nx] |= opp_bit
 
     def breadth_first_search(self) -> str:
-        """Finds the shortest solution path from entry to exit using BFS traversal.
+        """Find the shortest path from entry to exit using BFS traversal.
+
         Returns:
             str: Direction sequence string (e.g. "NNEESW") solving the maze.
         Raises:
@@ -240,7 +262,9 @@ class MazeGenerator:
             from collections import deque
 
             queue = deque([self.entry])
-            visited:dict[tuple[int, int], tuple[int, int] | None] = {self.entry: None}
+            visited: dict[
+                tuple[int, int], tuple[int, int] | None
+                ] = {self.entry: None}
 
             while queue:
                 current = queue.popleft()
