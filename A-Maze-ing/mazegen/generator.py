@@ -68,8 +68,27 @@ class MazeGenerator:
         start_x = center_x - (width_pattern // 2)
         start_y = center_y - (height_pattern // 2)
 
-        if self.width < width_pattern or self.height < height_pattern:
-            raise ValueError("Error: Labyrinth size is too small")
+        if self.width < 9 or self.height < 9:
+            raise ValueError(
+                "Error: Labyrinth width and height must be >= 9"
+                )
+
+        if self.width > 100 or self.height > 100:
+            raise ValueError(
+                "Error: Labyrinth width and height must be <= 100"
+                )
+
+        def _in_pattern_zone(x: int, y: int) -> bool:
+            return (start_x <= x < start_x + width_pattern
+                    and start_y <= y < start_y + height_pattern)
+
+        entrance_x, entrance_y = self.entry
+        exit_x, exit_y = self.exit
+
+        if _in_pattern_zone(entrance_x, entrance_y):
+            raise ValueError("Error: entrance is inside the pattern area")
+        if _in_pattern_zone(exit_x, exit_y):
+            raise ValueError("Error: exit is inside the pattern area")
 
         for y in range(height_pattern):
             for x in range(width_pattern):

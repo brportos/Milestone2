@@ -11,8 +11,8 @@ def bracket_validator(s: str) -> bool:
                 stack.pop()
             else:
                 return False
-        else:
+        elif c in brackets.values():
             stack.append(c)
     return True if not stack else False
 
-print(bracket_validator(""))
+print(bracket_validator("hello(Word)"))

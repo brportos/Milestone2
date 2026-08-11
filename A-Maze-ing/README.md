@@ -25,25 +25,25 @@ make build
 ### Execution
 To run the application with the configuration file:
 ```bash
-make or make run or python3 a_maze_ing.py config.txt
+make or make run
 ```
 ## Resources
 Website
-- https://share.google/G2pGIEU7unbXqX5IX
-- https://share.google/2ux1tghLyWZ9x5f2q
+- [DFS](https://share.google/G2pGIEU7unbXqX5IX)
+- [BFS](https://share.google/2ux1tghLyWZ9x5f2q)
+
 AI 
 - AI tools were used for explanations of concepts and function specifications.
 ## Additional sections
 ### Configuration File Structure
 The configuration file (config.txt) controls the generation parameters:
 - WIDTH=20
-- HEIGHT=20
-- ENTRY_X=0
-- ENTRY_Y=0
-- EXIT_X=19
-- EXIT_Y=19
-- SEED=42
+- HEIGHT=15
+- ENTRY=0,0
+- EXIT=19,14
+- OUTPUT_FILE=maze.txt
 - PERFECT=true
+- SEED=42
 - `WIDTH / HEIGHT`: Grid dimensions of the maze.
 - `ENTRY`: Starting cell coordinates.
 - `EXIT`: Goal/exit cell coordinates.
@@ -83,10 +83,14 @@ The core maze logic is completely decoupled from the MiniLibX (`mlx`) graphical 
 #### Install as a Python Wheel (`.whl`)
 Once built via `make build`, the `.whl` package in `dist/` can be installed into any independent Python project or virtual environment:
 
+**Install the mazegen package from the prebuilt wheel file. This installs it directly into your Python environment, so you no longer need to keep the local mazegen/ source folder around, the package is available system-wide (or in your virtual environment) just like any other installed library.**
 ```bash
-pip install dist/mazegen-1.0.0-py3-none-any.whl
+pip install mazegen-1.0.0-py3-none-any.whl
 ```
-
+**Once installed, run the main script and pass it a configuration file:**
+```bash
+python3 a_maze_ing.py config.txt
+```
 ### Roles of Team Members
 * **`brportos`:**
   - Randomized Depth-First Search (DFS).
@@ -96,6 +100,8 @@ pip install dist/mazegen-1.0.0-py3-none-any.whl
 * **`herinaan`:**
   - MiniLibX (`mlx`)
   - Parsing
+  - 42 pattern
+  - readme
 
 ---
 

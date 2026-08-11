@@ -1,30 +1,26 @@
-SHELL := /bin/bash
-PYTHON = python3
 VENV = env
 BIN = $(VENV)/bin
-
-MAIN = a_maze_ing.py 
-CONFIG = config.txt
+PY = $(BIN)/python
+ARGS = a_maze_ing.py config.txt
 
 all: run
 
-install:
-	@$(PYTHON) -m venv $(VENV)
-	@$(BIN)/pip install --upgrade pip build flake8 mypy
-	@$(BIN)/pip install ./mlx-2.2-py3-none-any.whl
-	@$(BIN)/pip install -r requirements.txt
-	@$(BIN)/pip install flake8-docstrings
+$(VENV):
+	@python3 -m venv $(VENV)
+	@$(BIN)/pip install --upgrade pip build flake8 mypy flake8-docstrings ./mlx-2.2-py3-none-any.whl -r requirements.txt
+
+install: $(VENV)
 
 run:
-	@source $(VENV)/bin/activate && python $(MAIN) $(CONFIG)
+	@$(PY) $(ARGS)
 
 debug:
-	@source $(VENV)/bin/activate && python -m pdb $(MAIN) $(CONFIG)
+	@$(PY) -m pdb $(ARGS)
 
 build:
-	@rm -rf dist/ build/
-	@$(BIN)/pip install build
-	@$(BIN)/python -m build
+	@$(PY) -m build
+	@cp dist/* .
+	@rm -rf dist
 
 clean:
 	@find . -type d -name __pycache__ -exec rm -rf {} +

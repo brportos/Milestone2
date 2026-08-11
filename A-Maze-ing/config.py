@@ -105,11 +105,11 @@ def parse_config(filepath: str) -> dict[str, Any]:
                 if len(parts) != 2:
                     print(f"invalide line: {line}")
                     continue
-                config[parts[0].strip()] = parts[1].strip()
+                config[parts[0].strip().upper()] = parts[1].strip()
 
         for key in REQUIRED_KEYS:
             if key not in config:
-                raise ValueError(f"Error: Missing key {key}")
+                raise ValueError(f"Missing key {key}")
 
         config = convert_value(config)
         validate_value(config)
