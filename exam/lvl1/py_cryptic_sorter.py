@@ -1,10 +1,27 @@
+def count_vowels(s: str) -> int:
+    count = 0
+    for i in s.lower():
+        if i in "eyuioa":
+            count += 1
+    return count
+
 def cryptic_sorter(strings: list[str]) -> list[str]:
-    n = len(strings)
-    
-    for i in range(n -1):
-        for j in range(n -i -1):
-            if len(strings[j]) > len(strings[j + 1]):
-                strings[j], strings[j + 1] = strings[j + 1], strings[j]
+
+    def get_sort_key(s):
+        return (len(s), s.lower(), count_vowels(s))
+
+    for i in range(len(strings)):
+        item = strings[i]
+        key = get_sort_key(item)
+        j = i - 1
+
+        while j >= 0 and get_sort_key(strings[j]) > key:
+            strings[j + 1] = strings[j]
+            j -= 1
+
+        strings[j + 1] = item
     return strings
+
+
 
 print(cryptic_sorter(["aaa","bbb","AAA","BBB"]))
