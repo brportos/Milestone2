@@ -1,5 +1,5 @@
 def echo_validator(text: str) -> bool:
-    cleaned = ""
+    cleaned = []
     for c in text:
         if c.isalpha():
             cleaned += c.lower()

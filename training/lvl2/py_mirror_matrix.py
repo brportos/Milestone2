@@ -1,4 +1,9 @@
-def mirror_matrix(matrix: list[list[list[int]]]) -> list[list[int]]:
-   return [row[::-1] for row in matrix]
+def mirror_matrix(matrix: list[list[int]]) -> list[list[int]]:
+    mtx =[]
 
-print(mirror_matrix([[1,2],[3,4],[5,6]]))
+    for m in matrix:
+        mtx += [m[::-1]]
+    return mtx
+
+
+print(mirror_matrix([[-1,-2],[-3,-4]]))
