@@ -1,9 +1,12 @@
 def whisper_lipher(text: str, shift: int) -> str:
     string = ""
     for i in text:
-        if i.isalpha():
-            string += chr(ord(i) + shift)
+        if i.isupper():
+            string += chr((ord(i) - ord('A') + shift)% 26 + ord('A'))
+        elif i.islower():
+            string += chr((ord(i) - ord('a') + shift)% 26 + ord('a'))
         else:
-            continue
+            string += i
     return (string)
-print(whisper_lipher("Hello, World!", 3))
+
+print(whisper_lipher("xyz", 20))
