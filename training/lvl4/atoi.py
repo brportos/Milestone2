@@ -9,7 +9,7 @@ def atoi(s: str) -> int:
         i += 1
 
     while i < len(string) and string[i].isdigit():
-        result = result * 10 + int(string[i])
+        result = result * 10 + (ord(string[i] - ord("0")))
         i += 1
 
     return sign * result
