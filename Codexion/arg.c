@@ -1,26 +1,7 @@
 #include "codexion.h"
 
 
-static int parse_data(t_data *data, int *argc)
-{
-	data->coder = malloc(sizeof(t_coder) * argc[0]);
-	if (!data->coder)
-		return (display_error("Can't allocate ", NULL, data));
-	data->dongle = malloc(sizeof(t_dongle) * argc[0]);
-	if (!data->dongle)
-		return(display_error("Can't allocate ", NULL, data));
-	data->ncoder = argc[0];
-	data->ndongle = argc[0];
-	data->max_burnout = argc[1];
-	data->time_compile = argc[2];
-	data->time_debug = argc[3];
-	data->time_refactor = argc[4];
-	data->required_compile = argc[5];
-	data->dongle_cooldown = argc[6];
-	return (0);
-
-}
-
+static int parse_data(t_data *data, int *argc);
 long long get_time_ms(void)
 {
 	struct timeval tv;
@@ -91,3 +72,22 @@ int	isargs_valid(t_data *data, char **argv)
 	return (0);
 }
 
+static int parse_data(t_data *data, int *argc)
+{
+	data->coder = malloc(sizeof(t_coder) * argc[0]);
+	if (!data->coder)
+		return (display_error("Can't allocate ", NULL, data));
+	data->dongle = malloc(sizeof(t_dongle) * argc[0]);
+	if (!data->dongle)
+		return(display_error("Can't allocate ", NULL, data));
+	data->ncoder = argc[0];
+	data->ndongle = argc[0];
+	data->max_burnout = argc[1];
+	data->time_compile = argc[2];
+	data->time_debug = argc[3];
+	data->time_refactor = argc[4];
+	data->required_compile = argc[5];
+	data->dongle_cooldown = argc[6];
+	return (0);
+
+}

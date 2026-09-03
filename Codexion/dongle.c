@@ -10,7 +10,7 @@ void	fill_dongle(char *string_id, int index)
 	i = 0;
 	while (index >= 0)
 	{
-		temp[i++] = (index % 26) + 'A';
+		temp[i++] = (index % 26);
 		index = (index / 26) - 1;
 	}
 	temp[i] = '\0';

@@ -23,7 +23,7 @@ int display_error(char  *string, char *details, t_data *data)
 {
     if (data != NULL)
         free_momory(data);
-    fprintf(stderr, "Error: %s", string);
+    fprintf(stderr, "\033[31mError\033[0m: %s", string);
     if (details != NULL)
         fprintf(stderr, "%s", details);
     fprintf(stderr, "\n");

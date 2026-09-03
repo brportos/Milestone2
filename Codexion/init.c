@@ -43,7 +43,7 @@ void    *monitoring_simulation(void *arg)
         {
             stop_simulation(data);
             pthread_mutex_lock(&data->mutex_print);
-            printf("All succed compile\n");
+            printf("\033[31mAll compiled successfully.\033[0m\n");
             pthread_mutex_unlock(&data->mutex_print);
             return (NULL);
         }

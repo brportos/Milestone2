@@ -7,7 +7,7 @@ int	main(int argc, char **argv)
 
 	memset(&data, 0, sizeof(t_data));
 	if (argc != 9)
-		return (display_error("Invalid arg", NULL, &data));
+		return (display_error("Argument invalid", NULL, &data));
 	if (isargs_valid(&data, argv) == 1)
 		return (1);
 	init_mutex(&data);
