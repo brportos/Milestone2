@@ -14,6 +14,6 @@ int	main(int argc, char **argv)
 	init_pthread(&data);
 	join_thread(&data);
 	destroy_mutex(&data);
-	
+	free_momory(&data);
 	return (0);
 }

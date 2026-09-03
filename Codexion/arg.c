@@ -5,10 +5,10 @@ static int parse_data(t_data *data, int *argc)
 {
 	data->coder = malloc(sizeof(t_coder) * argc[0]);
 	if (!data->coder)
-		return (display_error("Can't allocate", NULL, data));
+		return (display_error("Can't allocate ", NULL, data));
 	data->dongle = malloc(sizeof(t_dongle) * argc[0]);
 	if (!data->dongle)
-		return(display_error("Can't allocate", NULL, data));
+		return(display_error("Can't allocate ", NULL, data));
 	data->ncoder = argc[0];
 	data->ndongle = argc[0];
 	data->max_burnout = argc[1];
@@ -76,18 +76,18 @@ int	isargs_valid(t_data *data, char **argv)
 		if (parsed_argv[i -1] >= 1)
 		{
 			if (i == 1 && parsed_argv[i -1] >= MAX_CODERS)
-				return (display_error("Invalide arg", argv[i], data));
+				return (display_error("coders must be < ", argv[i], data));
 			i++;
 		}
 		else
-			return(display_error("Invalid arg", argv[i], data));
+			return(display_error("coders must be > ", argv[i], data));
 	}
 	if (parse_data(data, parsed_argv) == 1 || init_struct(data) == 1)
 		return (1);
 	if (strcmp(FIFO, argv[i]) == 0 || strcmp(EDT, argv[i]) == 0)
 		data->scheduler = argv[i];
 	else
-		return (display_error("Invalid arg", argv[i], data));
+		return (display_error("Invalid argument ", argv[i], data));
 	return (0);
 }
 

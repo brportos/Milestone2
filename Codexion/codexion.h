@@ -81,7 +81,6 @@ typedef struct s_data
 }                   t_data;
 int display_error(char  *string, char *details, t_data *data);
 long long get_time_ms(void);
-
 void init_coders(t_data *data, t_coder *coder, int count);
 void	fill_dongle(char *string_id, int index);
 long long	get_burnout(t_coder *coder);
@@ -92,20 +91,15 @@ int	check_burnout(t_data *data, int *done);
 int	get_simulation(t_data *data);
 int	take_dongle(t_coder *coder);
 int scheduler_fifo(t_data *data, t_coder *coder, char *action);
-
 int	isargs_valid(t_data *data, char **argv);
 void    set_done(t_coder *coder);
-
 void    init_mutex(t_data *data);
 void    init_pthread(t_data *data);
-
 void    stop_simulation(t_data *data);
-
 void    stop_simulation(t_data *data);
 void    display_log(int i, char *dongle_id, char *action, t_data *data);
 void    join_thread(t_data *data);
 void    destroy_mutex(t_data *data);
-
 int isfifo(t_data *data);
 int remove_from_queue(t_queue_manager *manager);
 void    release_dongles(t_coder *coder, t_data *data);
@@ -114,4 +108,5 @@ void	*coder_start_routine(void *arg);
 long long   get_simul_time(t_data *data);
 int ispriority(t_data *data, t_coder *coder);
 void    heap_pop(t_heap *heap, t_coder *coder);
+void    free_momory(t_data *data);
 #endif

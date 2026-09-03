@@ -18,18 +18,19 @@ void    display_log(int i, char *dongle_id, char *action, t_data *data)
 {
     long long time;
 
+    (void)dongle_id;
     pthread_mutex_lock(&data->mutex_print);
     time = get_time_ms() - data->start_time;
     if (strcmp(action, "takedongle") == 0)
-        printf("[%lld] Coder %d has taken dongle %s\n", time, i, dongle_id);
+        printf("%lld %d has taken a dongle\n", time, i);
     else if (strcmp(action, "compile") == 0)
-        printf("[%lld] Coder %d is compiling (%d)\n", time, i, data->coder[i -1].coder_compiled + 1);
+        printf("%lld %d is compiling\n", time, i);
     else if (strcmp(action, "debug") == 0)
-        printf("[%lld] Coder %d is debugging\n", time, i);
+        printf("%lld %d is debugging\n", time, i);
     else if (strcmp(action, "refactor") == 0)
-        printf("[%lld] Coder %d is refactoring\n", time, i);
+        printf("%lld %d is refactoring\n", time, i);
     else if(strcmp(action, "burns_out") == 0)
-        printf("[%lld] Coder %d burned out\n", time, i);
+        printf("%lld %d burned out\n", time, i);
     pthread_mutex_unlock(&data->mutex_print);
 
 }
