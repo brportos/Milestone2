@@ -79,34 +79,50 @@ typedef struct s_data
     pthread_mutex_t mutex_print;
     pthread_mutex_t mutex_simul;
 }                   t_data;
+void    display_log(int i, char *dongle_id, char *action, t_data *data);
 int display_error(char  *string, char *details, t_data *data);
+
 long long get_time_ms(void);
-void init_coders(t_data *data, t_coder *coder, int count);
-void	fill_dongle(char *string_id, int index);
+long long   get_simul_time(t_data *data);
+
 long long	get_burnout(t_coder *coder);
-int  heap_compare(t_coder *curr, t_coder *coder);
-void    scheduler_edf_add(t_data *data, t_coder *coder);
-void heap_swap(t_coder **tree, int i, int j);
 int	check_burnout(t_data *data, int *done);
-int	get_simulation(t_data *data);
-int	take_dongle(t_coder *coder);
+void    set_burnout(t_coder *coder);
+
+void    heap_pop(t_heap *heap, t_coder *coder);
+void    heap_push(t_heap *heap, t_coder *coder);
+
+void    scheduler_edf_add(t_data *data, t_coder *coder);
 int scheduler_fifo(t_data *data, t_coder *coder, char *action);
+int isfifo(t_data *data);
+
+
+void	fill_dongle(char *string_id, int index);
+int	take_dongle(t_coder *coder);
+void    release_dongles(t_coder *coder, t_data *data);
+void init_dongles_mutex(t_data *data);
+
 int	isargs_valid(t_data *data, char **argv);
-void    set_done(t_coder *coder);
+int add_to_queue(t_queue_manager *manager, t_coder *coder);
+int ispriority(t_data *data, t_coder *coder);
+void    join_thread(t_data *data);
+int *do_action(t_coder *coder, char *action);
+int get_have_done(t_coder *coder);
+
+void create_coders_and_dongles(t_data *data);
+
 void    init_mutex(t_data *data);
 void    init_pthread(t_data *data);
+int	init_struct(t_data *data);
+void	init_basic_data(t_data *data, t_coder *coder, int count);
+
 void    stop_simulation(t_data *data);
-void    stop_simulation(t_data *data);
-void    display_log(int i, char *dongle_id, char *action, t_data *data);
-void    join_thread(t_data *data);
-void    destroy_mutex(t_data *data);
-int isfifo(t_data *data);
-int remove_from_queue(t_queue_manager *manager);
-void    release_dongles(t_coder *coder, t_data *data);
-int *do_action(t_coder *coder, char *action);
+int	get_simulation(t_data *data);
+
 void	*coder_start_routine(void *arg);
-long long   get_simul_time(t_data *data);
-int ispriority(t_data *data, t_coder *coder);
-void    heap_pop(t_heap *heap, t_coder *coder);
+void    *monitoring_simulation(void *arg);
+
+void    destroy_mutex(t_data *data);
 void    free_momory(t_data *data);
+int remove_from_queue(t_queue_manager *manager);
 #endif

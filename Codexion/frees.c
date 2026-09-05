@@ -19,50 +19,41 @@ void    free_momory(t_data *data)
     }
 }
 
-int display_error(char  *string, char *details, t_data *data)
+int remove_from_queue(t_queue_manager *manager)
 {
-    if (data != NULL)
-        free_momory(data);
-    fprintf(stderr, "\033[31mError\033[0m: %s", string);
-    if (details != NULL)
-        fprintf(stderr, "%s", details);
-    fprintf(stderr, "\n");
-    return (1);
+    t_queue *tmp;
+
+    if (manager->first == NULL)
+        return (1);
+    tmp = manager->first;
+    manager->first = tmp->next;
+    if (manager->first == NULL)
+        manager->last = NULL;
+    free (tmp);
+    return (0);
 }
 
-long long   get_simul_time(t_data *data)
+static void destroy_mutex_cond(t_data *data)
 {
-    return (get_time_ms() - data->start_time);
+    pthread_cond_destroy(&data->queue_ctrl.cond);
+    pthread_cond_destroy(&data->heap_ctrl.cond);
 }
 
-void    set_done(t_coder *coder)
+void    destroy_mutex(t_data *data)
 {
-    pthread_mutex_lock(&coder->mutex_done);
-    coder->have_done = 1;
-    pthread_mutex_unlock(&coder->mutex_done);
-}
+    int i;
 
-void    release_dongles(t_coder *coder, t_data *data)
-{
-    long long   curr_time;
-
-    curr_time = get_simul_time(data);
-    coder->ldongle->cooldown = curr_time + data->dongle_cooldown;
-    if (coder->rdongle != NULL)
-        coder->rdongle->cooldown = curr_time + data->dongle_cooldown;
-    pthread_mutex_unlock(&coder->ldongle->lock);
-    if (coder->rdongle != NULL)
-        pthread_mutex_unlock(&coder->rdongle->lock);
-    if (isfifo(data))
+    i = 0;
+    while (i != data->ncoder)
     {
-        pthread_mutex_lock(&data->queue_ctrl.lock);
-        pthread_cond_broadcast(&data->queue_ctrl.cond);
-        pthread_mutex_unlock(&data->queue_ctrl.lock);
+        pthread_mutex_destroy(&data->dongle[i].lock);
+        pthread_mutex_destroy(&data->coder[i].mutex_burnout);
+        pthread_mutex_destroy(&data->coder[i].mutex_done);
+        i++;
     }
-    else
-    {
-        pthread_mutex_lock(&data->heap_ctrl.lock);
-        pthread_cond_broadcast(&data->heap_ctrl.cond);
-        pthread_mutex_unlock(&data->heap_ctrl.lock);
-    }
+    pthread_mutex_destroy(&data->mutex_print);
+    pthread_mutex_destroy(&data->mutex_simul);
+    pthread_mutex_destroy(&data->queue_ctrl.lock);
+    pthread_mutex_destroy(&data->heap_ctrl.lock);
+    destroy_mutex_cond(data);
 }

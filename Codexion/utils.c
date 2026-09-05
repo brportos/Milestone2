@@ -1,6 +1,7 @@
 #include "codexion.h"
 
 
+static void    set_done(t_coder *coder);
 int ispriority(t_data *data, t_coder *coder)
 {
     int lelf_i;
@@ -15,58 +16,6 @@ int ispriority(t_data *data, t_coder *coder)
     if (get_burnout(&data->coder[right_i]) < my_time)
         return (0);
     return (1);
-}
-
-void    heap_check_deadline(t_heap *heap, int i)
-{
-    int lft;
-    int rgt;
-    int small;
-
-    while ((i * 2) + 1 < heap->size)
-    {
-        lft = (i * 2) + 1;
-        rgt = (i * 2) + 1;
-        small = lft;
-        if (rgt < heap->size && heap_compare(heap->tree[rgt], heap->tree[lft]))
-            small = rgt;
-        if (heap_compare(heap->tree[small], heap->tree[i]))
-        {
-            heap_swap(heap->tree, i, small);
-            i = small;
-        }
-        else
-            break;
-    }
-}
-void    heap_pop(t_heap *heap, t_coder *coder)
-{
-    int i;
-
-    i = 0;
-    while (i < heap->size)
-    {
-        if (heap->tree[i] == coder)
-            break;
-        i++;
-    }
-    if (i == heap->size)
-        return ;
-    heap->size--;
-    heap->tree[i] = heap->tree[heap->size];
-    while (i > 0 && heap_compare(heap->tree[i], heap->tree[(i - 1) / 2]))
-    {
-        heap_swap(heap->tree, i, (i - 1) / 2);
-        i = (i - 1) / 2;
-    }
-    heap_check_deadline(heap, i);
-}
-
-void    set_burnout(t_coder *coder)
-{
-    pthread_mutex_lock(&coder->mutex_burnout);
-    coder->time_burnout = get_time_ms();
-    pthread_mutex_unlock(&coder->mutex_burnout);
 }
 
 int *do_action(t_coder *coder, char *action)
@@ -95,3 +44,35 @@ int *do_action(t_coder *coder, char *action)
     }
     return (0);
 }
+
+void    join_thread(t_data *data)
+{
+    int i;
+
+    i = 0;
+    pthread_join(data->monitoring_id, NULL);
+    while (i != data->ncoder)
+    {
+        pthread_join(data->coder[i].thread, NULL);
+        i++;
+    }
+}
+
+int get_have_done(t_coder *coder)
+{
+	int	done;
+
+	done = 0;
+	pthread_mutex_lock(&coder->mutex_done);
+	done = coder->have_done;
+	pthread_mutex_unlock(&coder->mutex_done);
+	return (done);
+}
+
+static void    set_done(t_coder *coder)
+{
+    pthread_mutex_lock(&coder->mutex_done);
+    coder->have_done = 1;
+    pthread_mutex_unlock(&coder->mutex_done);
+}
+

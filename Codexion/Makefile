@@ -10,10 +10,14 @@ SRC = coders.c \
 	arg.c \
 	frees.c \
 	init.c \
-	stop.c \
-	priority.c \
+	simul.c \
+	heap.c \
 	scheduler.c \
-	utils.c
+	utils.c \
+	burnout.c \
+	display.c \
+	time.c \
+	routine.c 
 
 OBJ = $(SRC:%.c=%.o)
 

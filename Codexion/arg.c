@@ -2,49 +2,6 @@
 
 
 static int parse_data(t_data *data, int *argc);
-long long get_time_ms(void)
-{
-	struct timeval tv;
-
-	gettimeofday(&tv, NULL);
-	return((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-void create_coders_and_dongles(t_data *data)
-{
-	int count;
-
-	count = 0;
-	while (data->ncoder != count)
-	{
-		init_coders(data, &data->coder[count], count);
-		fill_dongle(data->dongle[count].id, count);
-		data->dongle[count].cooldown = 0;
-		data->dongle[count].data = data;
-		count++;
-	}
-}
-
-int	init_struct(t_data *data)
-{
-	int	i;
-
-	data->active_simulation = 1;
-	data->start_time = get_time_ms();
-	data->queue_ctrl.first = NULL;
-	data->queue_ctrl.last = NULL;
-	data->heap_ctrl.size = 0;
-	i = 0;
-
-	while (i < MAX_CODERS)
-	{
-		data->heap_ctrl.tree[i] = NULL;
-		i++;
-	}
-	create_coders_and_dongles(data);
-	return (0);
-}
-
 int	isargs_valid(t_data *data, char **argv)
 {
 	int	i;
@@ -90,4 +47,26 @@ static int parse_data(t_data *data, int *argc)
 	data->dongle_cooldown = argc[6];
 	return (0);
 
+}
+
+int add_to_queue(t_queue_manager *manager, t_coder *coder)
+{
+    t_queue *queue;
+
+    queue = malloc(sizeof(t_queue));
+    if (!queue)
+        return (1);
+    queue->coder = coder;
+    queue->next = NULL;
+    if (manager->first == NULL)
+    {
+        manager->first = queue;
+        manager->last = queue;
+    }
+    else
+    {
+        manager->last->next = queue;
+        manager->last = queue;
+    }
+    return (0);
 }

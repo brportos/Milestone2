@@ -25,45 +25,74 @@ void	fill_dongle(char *string_id, int index)
 	
 }
 
-int	get_simulation(t_data *data)
+static int	try_take_dongle(t_dongle *dongle, t_data *data)
 {
-	int	simul;
-
-	simul = 0;
-	pthread_mutex_lock(&data->mutex_simul);
-	simul = data->active_simulation;
-	pthread_mutex_unlock(&data->mutex_simul);
-	return (simul);
+	pthread_mutex_lock(&dongle->lock);
+	if (get_simul_time(data) >= dongle->cooldown)
+		return (0);
+	pthread_mutex_unlock(&dongle->lock);
+	return (1);
 }
 
-int get_have_done(t_coder *coder)
+int	take_dongle(t_coder *coder)
 {
-	int	done;
-
-	done = 0;
-	pthread_mutex_lock(&coder->mutex_done);
-	done = coder->have_done;
-	pthread_mutex_unlock(&coder->mutex_done);
-	return (done);
-}
-
-int	check_burnout(t_data *data, int *done)
-{
-	int	i;
-
-	i = 0;
-	*done = 0;
-	while (data->ncoder != i)
+	if (try_take_dongle(coder->ldongle, coder->data) == 0)
 	{
-		if (get_have_done(&data->coder[i]) == 1)
-			(*done)++;
-		else if ((get_time_ms() - get_burnout(&data->coder[i])) > data->max_burnout)
+		if (coder->rdongle == NULL)
 		{
-			stop_simulation(data);
-			display_log(data->coder[i].id, 0, "burns_out", data);
+			pthread_mutex_unlock(&coder->ldongle->lock);
 			return (1);
 		}
-		i++;
+		if (try_take_dongle(coder->rdongle, coder->data) == 0)
+		{
+			display_log(coder->id, coder->ldongle->id, "takedongle", coder->data);
+			display_log(coder->id, coder->rdongle->id, "takedongle", coder->data);
+			return (0);
+		}
+		else
+		{
+			pthread_mutex_unlock(&coder->ldongle->lock);
+			return (1);
+		}
 	}
-	return (0);
+	return (1);
+}
+
+void    release_dongles(t_coder *coder, t_data *data)
+{
+    long long   curr_time;
+
+    curr_time = get_simul_time(data);
+    coder->ldongle->cooldown = curr_time + data->dongle_cooldown;
+    if (coder->rdongle != NULL)
+        coder->rdongle->cooldown = curr_time + data->dongle_cooldown;
+    pthread_mutex_unlock(&coder->ldongle->lock);
+    if (coder->rdongle != NULL)
+        pthread_mutex_unlock(&coder->rdongle->lock);
+    if (isfifo(data))
+    {
+        pthread_mutex_lock(&data->queue_ctrl.lock);
+        pthread_cond_broadcast(&data->queue_ctrl.cond);
+        pthread_mutex_unlock(&data->queue_ctrl.lock);
+    }
+    else
+    {
+        pthread_mutex_lock(&data->heap_ctrl.lock);
+        pthread_cond_broadcast(&data->heap_ctrl.cond);
+        pthread_mutex_unlock(&data->heap_ctrl.lock);
+    }
+}
+
+void init_dongles_mutex(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while (i != data->ncoder)
+    {
+        pthread_mutex_init(&data->dongle[i].lock, NULL);
+        pthread_mutex_init(&data->coder[i].mutex_burnout, NULL);
+        pthread_mutex_init(&data->coder[i].mutex_done, NULL);
+        i++;
+    }
 }
