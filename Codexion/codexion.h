@@ -6,7 +6,7 @@
 /*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:11 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/10 16:53:59 by portos           ###   ########.fr       */
+/*   Updated: 2026/09/10 17:41:51 by portos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@
 typedef struct s_data	t_data;
 typedef struct s_dongle
 {
-	t_data				*data;
 	long long			cooldown;
-	char				id[10];
 	pthread_mutex_t		lock;
 }						t_dongle;
 
