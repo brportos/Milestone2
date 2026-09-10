@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   coders.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
+/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:06 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/07 19:24:37 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/10 16:52:26 by portos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ static void	init_coders(t_data *data, t_coder *coder, int count)
 		}
 	}
 	else
+	{
 		coder->ldongle = &data->dongle[count];
+		display_log(coder->id, "takedongle",coder->data);
+	}
 }
 
 void	create_coders_and_dongles(t_data *data)
@@ -43,9 +46,7 @@ void	create_coders_and_dongles(t_data *data)
 	while (data->ncoder != count)
 	{
 		init_coders(data, &data->coder[count], count);
-		fill_dongle(data->dongle[count].id, count);
 		data->dongle[count].cooldown = 0;
-		data->dongle[count].data = data;
 		count++;
 	}
 }

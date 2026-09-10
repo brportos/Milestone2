@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codexion.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
+/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:11 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/08 08:32:02 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/10 16:53:59 by portos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,7 @@ typedef struct s_data
 	pthread_mutex_t		mutex_print;
 	pthread_mutex_t		mutex_simul;
 }						t_data;
-void					display_log(int i, char *dongle_id, char *action,
-							t_data *data);
+void					display_log(int i, char *action, t_data *data);
 int						display_error(char *string, char *details,
 							t_data *data);
 
@@ -111,7 +110,6 @@ int						scheduler_fifo(t_data *data, t_coder *coder,
 							char *action);
 int						isfifo(t_data *data);
 
-void					fill_dongle(char *string_id, int index);
 int						take_dongle(t_coder *coder);
 void					release_dongles(t_coder *coder, t_data *data);
 void					init_dongles_mutex(t_data *data);
@@ -122,6 +120,7 @@ int						ispriority(t_data *data, t_coder *coder);
 void					join_thread(t_data *data);
 int						do_action(t_coder *coder, char *action);
 int						get_have_done(t_coder *coder);
+void					set_done(t_coder *coder);
 
 void					create_coders_and_dongles(t_data *data);
 

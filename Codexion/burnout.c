@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   burnout.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
+/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:17:58 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/07 19:24:31 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/10 16:49:56 by portos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_burnout(t_data *data, int *done)
 				- get_burnout(&data->coder[i])) > data->max_burnout)
 		{
 			stop_simulation(data);
-			display_log(data->coder[i].id, 0, "burns_out", data);
+			display_log(data->coder[i].id, "burns_out", data);
 			return (1);
 		}
 		i++;

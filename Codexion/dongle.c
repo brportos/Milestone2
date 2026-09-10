@@ -3,37 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   dongle.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
+/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:20 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/07 19:24:50 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/10 16:47:51 by portos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	fill_dongle(char *string_id, int index)
-{
-	int		i;
-	int		len;
-	char	temp[10];
-
-	i = 0;
-	while (index >= 0)
-	{
-		temp[i++] = (index % 26);
-		index = (index / 26) - 1;
-	}
-	temp[i] = '\0';
-	len = i;
-	i = 0;
-	while (i < len)
-	{
-		string_id[i] = temp[len - 1 - i];
-		i++;
-	}
-	string_id[i] = '\0';
-}
 
 static int	try_take_dongle(t_dongle *dongle, t_data *data)
 {
@@ -55,10 +33,8 @@ int	take_dongle(t_coder *coder)
 		}
 		if (try_take_dongle(coder->rdongle, coder->data) == 0)
 		{
-			display_log(coder->id, coder->ldongle->id, "takedongle",
-				coder->data);
-			display_log(coder->id, coder->rdongle->id, "takedongle",
-				coder->data);
+			display_log(coder->id, "takedongle", coder->data);
+			display_log(coder->id, "takedongle", coder->data);
 			return (0);
 		}
 		else

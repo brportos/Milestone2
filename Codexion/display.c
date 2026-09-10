@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
+/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:15 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/07 19:24:46 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/10 16:46:38 by portos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,10 @@ int	display_error(char *string, char *details, t_data *data)
 	return (1);
 }
 
-void	display_log(int i, char *dongle_id, char *action, t_data *data)
+void	display_log(int i, char *action, t_data *data)
 {
 	long long	time;
 
-	(void)dongle_id;
 	pthread_mutex_lock(&data->mutex_print);
 	time = get_time_ms() - data->start_time;
 	if (strcmp(action, "takedongle") == 0)

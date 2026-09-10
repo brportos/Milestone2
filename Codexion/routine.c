@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
+/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:48 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/08 08:32:33 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/10 16:45:58 by portos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	*coder_start_routine(void *arg)
 			scheduler_fifo(coder->data, coder, "remove_queue");
 		do_action(coder, "debug");
 		do_action(coder, "refactor");
+		if (coder->coder_compiled >= coder->data->required_compile)
+			set_done(coder);
 	}
 	return (NULL);
 }

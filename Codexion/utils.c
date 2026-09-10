@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
+/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:19:04 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/08 08:33:49 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/10 16:53:29 by portos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static void	set_done(t_coder *coder);
 
 int	ispriority(t_data *data, t_coder *coder)
 {
@@ -37,21 +36,19 @@ int	do_action(t_coder *coder, char *action)
 	else if (strcmp(action, "compile") == 0)
 	{
 		set_burnout(coder);
-		display_log(coder->id, 0, "compile", coder->data);
+		display_log(coder->id, "compile", coder->data);
 		usleep(coder->data->time_compile * 1000);
 		coder->coder_compiled += 1;
-		if (coder->coder_compiled >= coder->data->required_compile)
-			set_done(coder);
 		release_dongles(coder, coder->data);
 	}
 	else if (strcmp(action, "debug") == 0)
 	{
-		display_log(coder->id, 0, "debug", coder->data);
+		display_log(coder->id, "debug", coder->data);
 		usleep(coder->data->time_debug * 1000);
 	}
 	else if (strcmp(action, "refactor") == 0)
 	{
-		display_log(coder->id, 0, "refactor", coder->data);
+		display_log(coder->id, "refactor", coder->data);
 		usleep(coder->data->time_refactor * 1000);
 	}
 	return (0);
@@ -81,7 +78,7 @@ int	get_have_done(t_coder *coder)
 	return (done);
 }
 
-static void	set_done(t_coder *coder)
+void	set_done(t_coder *coder)
 {
 	pthread_mutex_lock(&coder->mutex_done);
 	coder->have_done = 1;
