@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
+/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:48 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/10 16:45:58 by portos           ###   ########.fr       */
+/*   Updated: 2026/09/12 14:12:05 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	*coder_start_routine(void *arg)
 	t_coder	*coder;
 
 	coder = (t_coder *)arg;
+	if (coder->data->required_compile == 0)
+		return (set_done(coder), NULL);
 	while (get_simulation(coder->data) == 1 && coder->have_done == 0)
 	{
 		if (isfifo(coder->data))
@@ -29,7 +31,10 @@ void	*coder_start_routine(void *arg)
 		do_action(coder, "debug");
 		do_action(coder, "refactor");
 		if (coder->coder_compiled >= coder->data->required_compile)
+		{
 			set_done(coder);
+			break ;
+		}
 	}
 	return (NULL);
 }

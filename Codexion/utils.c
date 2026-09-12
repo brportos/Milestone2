@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
+/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:19:04 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/10 16:53:29 by portos           ###   ########.fr       */
+/*   Updated: 2026/09/12 10:40:41 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-
 int	ispriority(t_data *data, t_coder *coder)
 {
-	int			lelf_i;
-	int			right_i;
-	long long	my_time;
+	int		lelf_i;
+	int		right_i;
+	long	my_time;
 
 	lelf_i = (coder->id - 2 + data->ncoder) % data->ncoder;
 	right_i = coder->id % data->ncoder;

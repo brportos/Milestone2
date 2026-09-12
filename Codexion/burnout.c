@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   burnout.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
+/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:17:58 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/10 16:49:56 by portos           ###   ########.fr       */
+/*   Updated: 2026/09/12 13:06:25 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ int	check_burnout(t_data *data, int *done)
 	{
 		if (get_have_done(&data->coder[i]) == 1)
 			(*done)++;
+		else if (data->coder[i].coder_compiled >= data->required_compile)
+		{
+			i++;
+			continue ;
+		}
 		else if ((get_time_ms()
 				- get_burnout(&data->coder[i])) > data->max_burnout)
 		{
@@ -34,9 +39,9 @@ int	check_burnout(t_data *data, int *done)
 	return (0);
 }
 
-long long	get_burnout(t_coder *coder)
+long	get_burnout(t_coder *coder)
 {
-	long long	burnout;
+	long	burnout;
 
 	burnout = 0;
 	pthread_mutex_lock(&coder->mutex_burnout);

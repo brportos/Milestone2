@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
+/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:15 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/10 16:46:38 by portos           ###   ########.fr       */
+/*   Updated: 2026/09/12 10:36:55 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,19 @@ int	display_error(char *string, char *details, t_data *data)
 
 void	display_log(int i, char *action, t_data *data)
 {
-	long long	time;
+	long	time;
 
 	pthread_mutex_lock(&data->mutex_print);
 	time = get_time_ms() - data->start_time;
 	if (strcmp(action, "takedongle") == 0)
-		printf("%lld %d has taken a dongle\n", time, i);
+		printf("%ld %d has taken a dongle\n", time, i);
 	else if (strcmp(action, "compile") == 0)
-		printf("%lld %d is compiling\n", time, i);
+		printf("%ld %d is compiling\n", time, i);
 	else if (strcmp(action, "debug") == 0)
-		printf("%lld %d is debugging\n", time, i);
+		printf("%ld %d is debugging\n", time, i);
 	else if (strcmp(action, "refactor") == 0)
-		printf("%lld %d is refactoring\n", time, i);
+		printf("%ld %d is refactoring\n", time, i);
 	else if (strcmp(action, "burns_out") == 0)
-		printf("%lld %d burned out\n", time, i);
+		printf("%ld %d burned out\n", time, i);
 	pthread_mutex_unlock(&data->mutex_print);
 }

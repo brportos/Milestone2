@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
+/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:17:53 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/10 17:34:42 by portos           ###   ########.fr       */
+/*   Updated: 2026/09/12 14:46:41 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,21 @@ static int	parse_data(t_data *data, int *argc);
 int	isargs_valid(t_data *data, char **argv)
 {
 	int	i;
-	int	parsed_argv[8];
+	int	parsed[8];
 
 	i = 1;
-	while (i != 8)
+	while (i < 8)
 	{
-		parsed_argv[i - 1] = atoi(argv[i]);
-		if (parsed_argv[i - 1] >= 1)
-		{
-			if (i == 1 && parsed_argv[i - 1] >= MAX_CODERS)
-				return (display_error("coders must be < ", argv[i], data));
-			i++;
-		}
-		else
-			return (display_error("coders must be > ", argv[i], data));
+		parsed[i - 1] = atoi(argv[i]);
+		if ((i == 1 || i == 2) && parsed[i - 1] < 1)
+			return (display_error("Invalid ", argv[i], data));
+		if (i == 1 && parsed[i - 1] >= MAX_CODERS)
+			return (display_error("Invalid ", argv[i], data));
+		if (i >= 3 && i <= 7 && parsed[i - 1] < 0)
+			return (display_error("Invalid ", argv[i], data));
+		i++;
 	}
-	if (parse_data(data, parsed_argv) == 1 || init_struct(data) == 1)
+	if (parse_data(data, parsed) || init_struct(data))
 		return (1);
 	if (strcmp(FIFO, argv[i]) == 0 || strcmp(EDT, argv[i]) == 0)
 		data->scheduler = argv[i];

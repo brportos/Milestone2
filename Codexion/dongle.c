@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   dongle.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
+/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:20 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/10 16:47:51 by portos           ###   ########.fr       */
+/*   Updated: 2026/09/12 14:05:05 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
-
 
 static int	try_take_dongle(t_dongle *dongle, t_data *data)
 {
@@ -48,7 +47,7 @@ int	take_dongle(t_coder *coder)
 
 void	release_dongles(t_coder *coder, t_data *data)
 {
-	long long	curr_time;
+	long	curr_time;
 
 	curr_time = get_simul_time(data);
 	coder->ldongle->cooldown = curr_time + data->dongle_cooldown;

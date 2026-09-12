@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   coders.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: portos <portos@student.42.fr>              +#+  +:+       +#+        */
+/*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:06 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/10 16:52:26 by portos           ###   ########.fr       */
+/*   Updated: 2026/09/12 14:05:26 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	init_coders(t_data *data, t_coder *coder, int count)
 	else
 	{
 		coder->ldongle = &data->dongle[count];
-		display_log(coder->id, "takedongle",coder->data);
+		display_log(coder->id, "takedongle", coder->data);
 	}
 }
 

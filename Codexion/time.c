@@ -6,13 +6,13 @@
 /*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:19:00 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/07 19:24:08 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/12 10:30:32 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-long long	get_time_ms(void)
+long	get_time_ms(void)
 {
 	struct timeval	tv;
 
@@ -21,7 +21,7 @@ long long	get_time_ms(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-long long	get_simul_time(t_data *data)
+long	get_simul_time(t_data *data)
 {
 	return (get_time_ms() - data->start_time);
 }
