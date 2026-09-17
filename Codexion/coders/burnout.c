@@ -6,11 +6,13 @@
 /*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:17:58 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/12 13:06:25 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/17 12:49:50 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+
+int		get_coder_compiled(t_coder *coder);
 
 int	check_burnout(t_data *data, int *done)
 {
@@ -22,7 +24,7 @@ int	check_burnout(t_data *data, int *done)
 	{
 		if (get_have_done(&data->coder[i]) == 1)
 			(*done)++;
-		else if (data->coder[i].coder_compiled >= data->required_compile)
+		else if (get_coder_compiled(&data->coder[i]) >= data->required_compile)
 		{
 			i++;
 			continue ;
@@ -55,4 +57,14 @@ void	set_burnout(t_coder *coder)
 	pthread_mutex_lock(&coder->mutex_burnout);
 	coder->time_burnout = get_time_ms();
 	pthread_mutex_unlock(&coder->mutex_burnout);
+}
+
+int	get_coder_compiled(t_coder *coder)
+{
+	int	compiled;
+
+	pthread_mutex_lock(&coder->mutex_done);
+	compiled = coder->coder_compiled;
+	pthread_mutex_unlock(&coder->mutex_done);
+	return (compiled);
 }

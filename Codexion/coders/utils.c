@@ -6,7 +6,7 @@
 /*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:19:04 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/17 07:37:22 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/17 08:45:38 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ int	do_action(t_coder *coder, char *action)
 		set_burnout(coder);
 		display_log(coder->id, "compile", coder->data);
 		usleep(coder->data->time_compile * 1000);
+		pthread_mutex_lock(&coder->mutex_done);
 		coder->coder_compiled += 1;
+		pthread_mutex_unlock(&coder->mutex_done);
 		release_dongles(coder, coder->data);
 	}
 	else if (strcmp(action, "debug") == 0)
