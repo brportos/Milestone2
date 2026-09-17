@@ -6,7 +6,7 @@
 /*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:52 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/08 08:33:19 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/16 12:56:30 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	scheduler_edf_add(t_data *data, t_coder *coder)
 			if (take_dongle(coder) == 0)
 				break ;
 		}
-		usleep(500);
+		usleep(00);
 	}
 	pthread_mutex_lock(&heap->lock);
 	heap_pop(heap, coder);

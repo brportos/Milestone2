@@ -6,7 +6,7 @@
 /*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:19:04 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/12 10:40:41 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/17 07:37:22 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ int	ispriority(t_data *data, t_coder *coder)
 	lelf_i = (coder->id - 2 + data->ncoder) % data->ncoder;
 	right_i = coder->id % data->ncoder;
 	my_time = get_burnout(coder);
-	if (get_burnout(&data->coder[lelf_i]) < my_time)
+	if (get_have_done(&data->coder[lelf_i]) == 0
+		&& get_burnout(&data->coder[lelf_i]) < my_time)
 		return (0);
-	if (get_burnout(&data->coder[right_i]) < my_time)
+	if (get_have_done(&data->coder[right_i]) == 0
+		&& get_burnout(&data->coder[right_i]) < my_time)
 		return (0);
 	return (1);
 }

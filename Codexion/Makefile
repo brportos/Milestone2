@@ -4,20 +4,20 @@ CC = cc -g
 CFLAGS = -Wall -Wextra -Werror
 
 
-SRC = coders.c \
-	main.c \
-	dongle.c \
-	arg.c \
-	frees.c \
-	init.c \
-	simul.c \
-	heap.c \
-	scheduler.c \
-	utils.c \
-	burnout.c \
-	display.c \
-	time.c \
-	routine.c 
+SRC = coders/coders.c \
+	coders/main.c \
+	coders/dongle.c \
+	coders/arg.c \
+	coders/frees.c \
+	coders/init.c \
+	coders/simul.c \
+	coders/heap.c \
+	coders/scheduler.c \
+	coders/utils.c \
+	coders/burnout.c \
+	coders/display.c \
+	coders/time.c \
+	coders/routine.c 
 
 OBJ = $(SRC:%.c=%.o)
 

@@ -6,7 +6,7 @@
 /*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:48 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/12 14:12:05 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/16 13:12:50 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	*monitoring_simulation(void *arg)
 			pthread_mutex_unlock(&data->mutex_print);
 			return (NULL);
 		}
-		usleep(100);
+		usleep(500);
 	}
 	return (NULL);
 }

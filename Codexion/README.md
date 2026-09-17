@@ -24,7 +24,7 @@ make
 Website
 - [miltiphreading](https://qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.getting_started/topic/s1_procs_thread_attr.html?utm_source=chatgpt.com)
 - [pthread](https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2)
-- [mutex] (https://www.codequoi.com/en/threads-mutexes-and-concurrent-programming-in-c/)
+- [mutex](https://www.codequoi.com/en/threads-mutexes-and-concurrent-programming-in-c/)
 - [Thread](https://www.geeksforgeeks.org/thread-functions-in-c-c/)
 
 AI 
