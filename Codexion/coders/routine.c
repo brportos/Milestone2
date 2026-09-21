@@ -6,7 +6,7 @@
 /*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:48 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/16 13:12:50 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/21 10:48:03 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	*coder_start_routine(void *arg)
 		return (set_done(coder), NULL);
 	while (get_simulation(coder->data) == 1 && coder->have_done == 0)
 	{
+		set_burnout(coder);
 		if (isfifo(coder->data))
 			scheduler_fifo(coder->data, coder, "add_queue");
 		else

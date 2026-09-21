@@ -1,7 +1,7 @@
 NAME = codexion
 
 CC = cc -g
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 
 SRC = coders/coders.c \
@@ -27,7 +27,7 @@ all: $(NAME)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) -o $@ $(OBJ) -pthread
+	@$(CC) $(CFLAGS) -o $@ $(OBJ)
 	@echo "codexion is created"
 
 clean:

@@ -6,7 +6,7 @@
 /*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:18:52 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/16 12:56:30 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/21 12:55:02 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void	fifo_add_queue(t_data *data, t_coder *coder)
 		if (get_simulation(data) == 1 && data->queue_ctrl.first->coder == coder)
 		{
 			pthread_mutex_unlock(&data->queue_ctrl.lock);
-			usleep(1000);
+			usleep(300);
 			pthread_mutex_lock(&data->queue_ctrl.lock);
 		}
 		else
