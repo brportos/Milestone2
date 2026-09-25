@@ -6,13 +6,33 @@
 /*   By: brportos <brportos@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 19:17:53 by brportos          #+#    #+#             */
-/*   Updated: 2026/09/17 07:41:24 by brportos         ###   ########.fr       */
+/*   Updated: 2026/09/25 12:42:47 by brportos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
 static int	parse_data(t_data *data, int *argc);
+
+static int	is_valid_digit_string(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str || str[0] == '\0')
+		return (0);
+	if (str[0] == '+')
+		i++;
+	if (str[i] == '\0')
+		return (0);
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 int	isargs_valid(t_data *data, char **argv)
 {
@@ -22,6 +42,8 @@ int	isargs_valid(t_data *data, char **argv)
 	i = 1;
 	while (i < 8)
 	{
+		if (!is_valid_digit_string(argv[i]))
+			return (display_error("Invalid: ", argv[i], data));
 		parsed[i - 1] = atoi(argv[i]);
 		if ((i == 1 || i == 2) && parsed[i - 1] < 1)
 			return (display_error("Invalid ", argv[i], data));
